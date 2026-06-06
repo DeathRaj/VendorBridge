@@ -39,6 +39,10 @@ class RFQ(Base):
 
     quotations = relationship("Quotation", back_populates="rfq", cascade="all, delete-orphan")
 
+    @property
+    def name(self) -> str:
+        return f"RFQ/2026/{str(self.id).zfill(5)}"
+
 class Quotation(Base):
     __tablename__ = "quotations"
 

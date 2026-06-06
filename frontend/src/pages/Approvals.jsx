@@ -30,10 +30,10 @@ const Approvals = () => {
     const rfq = qtn ? rfqs.find(r => r.id === qtn.rfq_id) : null;
     return {
       ...app,
-      qtnName: qtn ? qtn.name : 'Unknown QTN',
-      rfqName: rfq ? rfq.name : 'Unknown RFQ',
-      vendorName: vendor ? vendor.name : 'Unknown Vendor',
-      amount: qtn ? qtn.total_amount : 0
+      qtnName: qtn?.name || `QTN #${app.quotation_id}`,
+      rfqName: rfq?.name || rfq?.title || 'Unknown RFQ',
+      vendorName: vendor?.name || 'Unknown Vendor',
+      amount: qtn?.total_amount || qtn?.price || 0
     };
   });
 
@@ -45,7 +45,7 @@ const Approvals = () => {
       <td className="font-semibold text-accent-blue">{app.qtnName}</td>
       <td>{app.rfqName}</td>
       <td className="font-medium">{app.vendorName}</td>
-      <td className="font-semibold">${app.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+      <td className="font-semibold">${(app.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
       <td>{app.date}</td>
       <td>{app.approver_name}</td>
       <td>

@@ -22,8 +22,8 @@ const PurchaseOrders = () => {
     alert('Purchase Order confirmed!');
   };
 
-  const handleGenerateInvoice = (poId) => {
-    const invoice = generateInvoice(poId);
+  const handleGenerateInvoice = async (poId) => {
+    const invoice = await generateInvoice(poId);
     if (invoice) {
       alert(`Invoice ${invoice.invoice_number} generated successfully as Draft!`);
       navigate('/invoices');
@@ -47,9 +47,9 @@ const PurchaseOrders = () => {
       Phone: ${v ? v.phone : 'N/A'}
       
       Financial Summary:
-      Subtotal: $${po.total_amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+      Subtotal: $${(po.total_amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
       Tax (0% Standard PO): $0.00
-      Total: $${po.total_amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+      Total: $${(po.total_amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
       
       Linked Bid: ${qtn ? qtn.name : 'N/A'}
       ========================================
@@ -71,7 +71,7 @@ const PurchaseOrders = () => {
       <td>{getQtnName(po.quotation_id)}</td>
       <td className="font-medium">{getVendorName(po.vendor_id)}</td>
       <td>{po.order_date}</td>
-      <td className="font-semibold">${po.total_amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+      <td className="font-semibold">${(po.total_amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
       <td><StatusBadge status={po.status} /></td>
       <td>
         <div className="table-actions">
@@ -191,7 +191,7 @@ const PurchaseOrders = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px', borderRadius: '8px', border: '1px solid #a7f3d0', backgroundColor: '#d1fae5' }}>
                   <span className="font-semibold" style={{ color: '#065f46' }}>Total Amount</span>
                   <span className="font-bold text-accent-green" style={{ fontSize: '18px', color: '#065f46' }}>
-                    ${selectedPO.total_amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    ${(selectedPO.total_amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>
               </div>

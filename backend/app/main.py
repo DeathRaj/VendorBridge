@@ -585,7 +585,7 @@ def get_approvals(
 def generate_purchase_order(
     po_in: PurchaseOrderCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_roles(["Procurement Officer"]))
+    current_user: User = Depends(require_roles(["Procurement Officer", "Manager", "Admin"]))
 ):
     qtn = db.query(Quotation).filter(Quotation.id == po_in.quotation_id).first()
     if not qtn:
@@ -645,7 +645,7 @@ def confirm_purchase_order(
 def generate_invoice(
     inv_in: InvoiceCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_roles(["Procurement Officer"]))
+    current_user: User = Depends(require_roles(["Procurement Officer", "Manager", "Admin"]))
 ):
     po = db.query(PurchaseOrder).filter(PurchaseOrder.id == inv_in.purchase_order_id).first()
     if not po:
@@ -687,7 +687,7 @@ def get_invoices(
 def post_invoice(
     invoice_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_roles(["Procurement Officer"]))
+    current_user: User = Depends(require_roles(["Procurement Officer", "Manager", "Admin"]))
 ):
     inv = db.query(Invoice).filter(Invoice.id == invoice_id).first()
     if not inv:
@@ -702,7 +702,7 @@ def post_invoice(
 def pay_invoice(
     invoice_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_roles(["Procurement Officer"]))
+    current_user: User = Depends(require_roles(["Procurement Officer", "Manager", "Admin"]))
 ):
     inv = db.query(Invoice).filter(Invoice.id == invoice_id).first()
     if not inv:

@@ -81,6 +81,7 @@ class RfqResponse(BaseModel):
     deadline: str
     status: str
     created_at: datetime
+    name: str
 
     class Config:
         from_attributes = True

@@ -46,7 +46,7 @@ const Sidebar = () => {
 
   const filteredMenuItems = menuItems.filter(item => {
     if (user?.role === 'Vendor') {
-      return ['Dashboard', 'Vendors', 'RFQs', 'Purchase Orders'].includes(item.name);
+      return ['Dashboard', 'RFQs', 'Purchase Orders', 'Invoices'].includes(item.name);
     }
     if (user?.role === 'Procurement Officer') {
       return !['Vendors', 'Approvals'].includes(item.name);

@@ -227,8 +227,8 @@ const Invoices = () => {
       <td className="font-semibold text-accent-blue">{inv.invoice_number}</td>
       <td>{getPoNumber(inv.purchase_order_id)}</td>
       <td>{inv.invoice_date}</td>
-      <td>${inv.tax_amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-      <td className="font-semibold">${inv.total_amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+      <td>${(inv.tax_amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+      <td className="font-semibold">${(inv.total_amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
       <td><StatusBadge status={inv.status} /></td>
       <td>
         <div className="table-actions">

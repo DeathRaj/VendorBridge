@@ -30,7 +30,7 @@ const QuotationComparison = () => {
 
   let lowestPriceQtnId = null;
   if (activeQuotations.length > 0) {
-    const sorted = [...activeQuotations].sort((a, b) => a.total_amount - b.total_amount);
+    const sorted = [...activeQuotations].sort((a, b) => (a.total_amount || 0) - (b.total_amount || 0));
     lowestPriceQtnId = sorted[0].id;
   }
 
@@ -112,7 +112,7 @@ const QuotationComparison = () => {
                 <div className="bid-card-details py-3">
                   <div className="detail-row mb-2">
                     <span className="detail-label">Base Cost / Unit</span>
-                    <span className="detail-value">${qtn.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                    <span className="detail-value">${(qtn.price || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                   </div>
                   <div className="detail-row mb-2">
                     <span className="detail-label">Delivery Lead Time</span>
@@ -121,7 +121,7 @@ const QuotationComparison = () => {
                   <div className="detail-row grand-total mt-3">
                     <span className="detail-label font-bold">Total Bid Value</span>
                     <span className="detail-value text-accent-green">
-                      ${qtn.total_amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      ${(qtn.total_amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
@@ -142,7 +142,7 @@ const QuotationComparison = () => {
                   )}
                   {qtn.status === 'approved' && (() => {
                     const poExists = purchaseOrders.some(p => p.quotation_id === qtn.id);
-                    if (!poExists && user?.role === 'Procurement Officer') {
+                    if (!poExists && (user?.role === 'Procurement Officer' || user?.role === 'Manager' || user?.role === 'Admin')) {
                       return (
                         <button 
                           className="btn btn-primary btn-block" 
