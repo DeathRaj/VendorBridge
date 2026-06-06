@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_vendor_bridge_quotation_tree" model="ir.ui.view">
+        <name>vendor.bridge.quotation.tree</name>
+        <model>vendor.bridge.quotation</model>
+        <arch type="xml">
+            <tree string="Quotations" decoration-info="status == 'draft'" decoration-warning="status == 'under_review'" decoration-success="status == 'approved'" decoration-danger="status == 'rejected'">
+                <field name="name"/>
+                <field name="rfq_id"/>
+                <field name="vendor_id"/>
+                <field name="total_amount"/>
+                <field name="delivery_days"/>
+                <field name="status"/>
+            </tree>
+        </arch>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_vendor_bridge_quotation_form" model="ir.ui.view">
+        <name>vendor.bridge.quotation.form</name>
+        <model>vendor.bridge.quotation</model>
+        <arch type="xml">
+            <form string="Quotation">
+                <header>
+                    <button name="action_submit_for_approval" string="Submit for Approval" type="object" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'draft')]}"/>
+                    <button name="action_approve" string="Approve" type="object" class="oe_highlight" groups="vendor_bridge.group_vendor_bridge_manager" attrs="{'invisible': [('status', '!=', 'under_review')]}"/>
+                    <button name="action_reject" string="Reject" type="object" groups="vendor_bridge.group_vendor_bridge_manager" attrs="{'invisible': [('status', '!=', 'under_review')]}"/>
+                    <button name="action_generate_po" string="Generate Purchase Order" type="object" class="oe_highlight" attrs="{'invisible': [('status', '!=', 'approved')]}"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,under_review,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="rfq_id" attrs="{'readonly': [('status', 'not in', ['draft'])]}"/>
+                            <field name="vendor_id" attrs="{'readonly': [('status', 'not in', ['draft'])]}"/>
+                        </group>
+                        <group>
+                            <field name="price" attrs="{'readonly': [('status', 'not in', ['draft'])]}"/>
+                            <field name="delivery_days" attrs="{'readonly': [('status', 'not in', ['draft'])]}"/>
+                            <field name="total_amount" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Quotation Line Items">
+                            <field name="line_ids" attrs="{'readonly': [('status', 'not in', ['draft'])]}">
+                                <tree editable="bottom">
+                                    <field name="product_name"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="subtotal" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Vendor terms and notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </arch>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_vendor_bridge_quotation_search" model="ir.ui.view">
+        <name>vendor.bridge.quotation.search</name>
+        <model>vendor.bridge.quotation</model>
+        <arch type="xml">
+            <search string="Search Quotations">
+                <field name="name"/>
+                <field name="rfq_id"/>
+                <field name="vendor_id"/>
+                <field name="status"/>
+                <filter string="Draft" name="status_draft" domain="[('status', '=', 'draft')]"/>
+                <filter string="Under Review" name="status_review" domain="[('status', '=', 'under_review')]"/>
+                <filter string="Approved" name="status_approved" domain="[('status', '=', 'approved')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="RFQ" name="group_by_rfq" context="{'group_by': 'rfq_id'}"/>
+                    <filter string="Vendor" name="group_by_vendor" context="{'group_by': 'vendor_id'}"/>
+                    <filter string="Status" name="group_by_status" context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </arch>
+    </record>
+
+    <!-- Action -->
+    <record id="action_vendor_bridge_quotation" model="ir.actions.act_window">
+        <name>Quotations</name>
+        <res_model>vendor.bridge.quotation</res_model>
+        <view_mode>tree,form</view_mode>
+        <search_view_id ref="view_vendor_bridge_quotation_search"/>
+        <help type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Submit and review vendor quotations here.
+            </p>
+        </help>
+    </record>
+</odoo>

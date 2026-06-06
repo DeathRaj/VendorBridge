@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Module Category -->
+        <record id="module_category_vendor_bridge" model="ir.module.category">
+            <name>Vendor Bridge</name>
+            <description>Procurement &amp; Vendor Management System.</description>
+            <sequence>10</sequence>
+        </record>
+
+        <!-- User Group -->
+        <record id="group_vendor_bridge_user" model="res.groups">
+            <name>User</name>
+            <category_id ref="module_category_vendor_bridge"/>
+            <implied_ids eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Manager Group -->
+        <record id="group_vendor_bridge_manager" model="res.groups">
+            <name>Manager</name>
+            <category_id ref="module_category_vendor_bridge"/>
+            <implied_ids eval="[(4, ref('group_vendor_bridge_user'))]"/>
+            <users eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+    </data>
+</odoo>

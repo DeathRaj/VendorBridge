@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_invoice" model="ir.actions.report">
+        <name>Invoice Printout</name>
+        <model>vendor.bridge.invoice</model>
+        <report_type>qweb-pdf</report_type>
+        <report_name>vendor_bridge.report_invoice_template</report_name>
+        <report_file>vendor_bridge.report_invoice_template</report_file>
+        <binding_model_id ref="model_vendor_bridge_invoice"/>
+        <binding_type>report</binding_type>
+    </record>
+
+    <template id="report_invoice_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Invoice: <span t-field="o.invoice_number"/></h2>
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <strong>Vendor:</strong>
+                                <div t-field="o.purchase_order_id.vendor_id.name"/>
+                                <div t-field="o.purchase_order_id.vendor_id.email"/>
+                                <div t-field="o.purchase_order_id.vendor_id.phone"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Details:</strong>
+                                <div>Date: <span t-field="o.invoice_date"/></div>
+                                <div>Purchase Order: <span t-field="o.purchase_order_id.po_number"/></div>
+                                <div>Quotation: <span t-field="o.purchase_order_id.quotation_id.name"/></div>
+                            </div>
+                        </div>
+                        <table class="table table-sm table-striped mt-4">
+                            <thead>
+                                <tr>
+                                    <th>Product/Service</th>
+                                    <th class="text-right">Quantity</th>
+                                    <th class="text-right">Unit Price</th>
+                                    <th class="text-right">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.quotation_line_ids" t-as="line">
+                                    <tr>
+                                        <td><span t-field="line.product_name"/></td>
+                                        <td class="text-right"><span t-field="line.quantity"/></td>
+                                        <td class="text-right"><span t-field="line.unit_price"/></td>
+                                        <td class="text-right"><span t-field="line.subtotal"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <div class="row justify-content-end mt-4">
+                            <div class="col-4">
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td>Tax Amount (18%)</td>
+                                        <td class="text-right"><span t-field="o.tax_amount"/></td>
+                                    </tr>
+                                    <tr class="border-top border-dark">
+                                        <td><strong>Total Amount</strong></td>
+                                        <td class="text-right">
+                                            <strong><span t-field="o.total_amount"/></strong>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
